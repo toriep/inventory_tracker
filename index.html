@@ -7,50 +7,50 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <script src="script.js"></script>
     <meta name="viewport" content="initial-scale=1, user-scalable=no">
+    <title>Inventory Tracker</title>
 </head>
 <body>
 <div class="container">
     <div class="form-group">
         <!-- only show this element when the isn't on mobile -->
-        <h1 class="hidden-xs page-header">Inventory Table
-            <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small>
+        <h1 class="hidden-xs page-header">Inventory Tracker
+            <!-- <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small> -->
         </h1>
         <!-- only show this element when the user gets to a mobile version -->
-        <h3 class="visible-xs page-header col-xs-11">Inventory Table
-            <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small>
+        <h3 class="visible-xs page-header col-xs-11">Inventory Tracker
+            <!-- <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small> -->
         </h3>
     </div>
     <div class="item-add-form form-group col-lg-3 col-med-3 col-sm-4 col-xs-12 pull-right">
         <h4>Add Item</h4>
         <div class="form-group input-group">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-user"></span>
+                <span class="glyphicon glyphicon-tag"></span>
             </span>
             <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Item Name" onblur="removeRedFromItemForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-list-alt"></span>
+                <span class="glyphicon glyphicon-usd"></span>
             </span>
             <input type="text" class="form-control" name="price" id="price" placeholder="Item Price" onblur="removeRedFromPriceForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
-                <span class="glyphicon glyphicon-education"></span>
+                <span class="glyphicon glyphicon-shopping-cart"></span>
             </span>
             <input type="text" class="form-control" name="itemQuantity" id="itemQuantity" placeholder="Item Quantity"  onblur="removeRedFromQuantityForm()">
         </div>
-        <button type="button" class="btn btn-success" id="addBtn" onclick="handleAddClicked()">Add</button>
+        <button type="button" class="btn btn-success" id="addBtn" onclick="handleAddClicked()">Add Item</button>
         <button type="button" class="btn btn-default" onclick="handleCancelClick()">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="getItemData()">Get Data</button>
     </div>
     <div class="item-list-container col-xs-12 col-sm-8 col-md-8 col-lg-9 ">
         <table class="table item-list">
             <thead>
             <tr>
                 <th>Item</th>
-                <th>Quantity</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th>Operations</th>
             </tr>
             </thead>

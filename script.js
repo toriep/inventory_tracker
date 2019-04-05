@@ -14,8 +14,8 @@ $(document).ready(initializeApp);
  * @type {Array}
  * example of item_array after input: 
  * item_array = [
- *  { name: 'Jake', price: 'Math', quantity: 85 },
- *  { name: 'Jill', price: 'Comp Sci', quantity: 85 }
+ *  { name: 'Jake', class: 'Math', quantity: 85 },
+ *  { name: 'Jill', class: 'Comp Sci', quantity: 85 }
  * ];
  */
 var item_array = [];
@@ -124,19 +124,19 @@ function clearAddItemFormInputs(){
  */
 
  //<button type="button" price="btn btn-danger">Danger</button>
-function renderItemOnDom(itemObj){
+function renderItemOnDom(itemObj,index){
   var name = $('<td>',{
     text: itemObj.name,
-    price: "itemName"
+    class: "itemName"
   });
-  var price = $('<td>').text(itemObj.price);
+  var price = $('<td>').text(`${itemObj.price} USD`);
   var quantity = $('<td>').text(itemObj.quantity);
   var deleteButton = $('<button>',{
-    price: "btn btn-danger btn-xs",
+    class: "btn btn-danger btn-xs",
     text: 'Delete'
   });
   var editButton = $('<button>',{
-    price: "btn btn-warning btn-xs",
+    class: "btn btn-warning btn-xs",
     text: 'Edit'
   });
   deleteButton.click(function(){
@@ -153,7 +153,13 @@ function renderItemOnDom(itemObj){
   var buttonsDiv = $('<div>');
   var deleteTD = $('<td>');
   buttonsDiv.append(editButton,deleteButton).appendTo(deleteTD);
-  var tableRowIndex = $('<tr>');
+  if(index%2==0){
+    var tableRowIndex = $('<tr>',{
+      class: "gray",
+    });
+  } else{
+    var tableRowIndex = $('<tr>');
+  }
   tableRowIndex.append(name,price,quantity,deleteTD).appendTo('tbody');
 };
 
@@ -164,8 +170,7 @@ function renderItemOnDom(itemObj){
  * @calls renderItemOnDom, calculateQuantityAverage, renderQuantityAverage
  */
 function updateItemList(item){
-  var currentitem = item;
-  renderItemOnDom(currentitem);
+  renderItemOnDom(item);
   renderQuantityAverage(calculateQuantityAverage());
 };
 /***************************************************************************************************
@@ -205,7 +210,7 @@ function removeItem(item,row){
 
 function getItemData(){
   var itemsAPI = {
-    url: 'http://localhost:5700/read.php',
+    url: 'http://localhost:5700/api/read.php',
     success: displayItems,
     method: 'post',
     dataType: 'json',
@@ -218,7 +223,7 @@ function displayItems(response){
   var inventory = response.data;
   for(var s=0;s<inventory.length;s++){
     item_array.push(inventory[s]);
-    updateItemList(inventory[s]);
+    renderItemOnDom(inventory[s],s);
   };
   console.log("item_array after pulling API data: ", item_array);
 };
@@ -230,7 +235,7 @@ function sendDataToAPI(item){
     method: 'post',
     data: {
       name: item.name,
-      price: item.price,
+      class: item.price,
       quantity: item.quantity,
     },
     dataType: 'JSON',
