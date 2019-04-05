@@ -56,3 +56,13 @@ button.btn.btn-secondary {
     color: white;
     margin-right: 10px;
 }
+
+.gray{
+  background-color: #eee;
+}
+
+@media (max-width: 480px){
+  .btn-xs{
+    padding: 1px 2px;
+  }
+}
