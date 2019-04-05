@@ -230,12 +230,12 @@ function displayItems(response){
 
 function sendDataToAPI(item){
   var itemsAPI = {
-    url: 'http://s-apis.learningfuze.com/IT/create',
+    url: 'http://localhost:5700/api/create.php',
     success: addDataToAPI,
     method: 'post',
     data: {
       name: item.name,
-      class: item.price,
+      price: item.price,
       quantity: item.quantity,
     },
     dataType: 'JSON',
@@ -313,7 +313,7 @@ function areInputsValid(name,price,quantity){
     $('#itemName').attr("placeholder", "Enter at least 2 letters").addClass('red error');
     $('.glyphicon-user').addClass('glyphError');
   };
-  if(price<2 ){ 
+  if(isNaN(price) || price.length<1){ 
     invalidCounter++
     $('#price').val("");
     $('#price').attr("placeholder", "Enter at least 2 letters").addClass('red error');
