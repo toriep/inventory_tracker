@@ -10,11 +10,11 @@ $(document).ready(initializeApp);
  * Define all global variables here.  
  */
 /***********************
- * item_array - global array to hold item objects
+ * itemsArray - global array to hold item objects
  * @type {Array}
  */
-var item_array = [];
-var isChecked;
+let itemsArray = [];
+let isChecked;
 
 
 // var nameForm = $('#itemName');
@@ -54,7 +54,7 @@ function addClickHandlersToElements(){
 
   $("#itemQuantity").on("keyup", function(event) {
     if (event.keyCode === 13) {//if enter key is released
-    $("#addBtn").click();//runs the function attaches to click event off add button
+      $("#addBtn").click();//runs the function attaches to click event off add button
     }
   });
 };
@@ -84,16 +84,16 @@ function handleCancelClick(){
  * @calls clearAddItemFormInputs, updateItemList
  */
 function addItem(){
-  var item = {};
-  item.name = $('#itemName').val();
-  item.price = $('#price').val();
-  item.quantity = $('#itemQuantity').val();
-  if(!areInputsValid(item.name,item.price,item.quantity)){//if any of the forms is invalid, disable adding item
+  const name = $('#itemName').val();
+  const price = $('#price').val();
+  const quantity = $('#itemQuantity').val();
+  const item = { name, price, quantity};
+  if(!areInputsValid(item.name, item.price, item.quantity)){//if any of the forms is invalid, disable adding item
     return;
   };
-  item_array.push(item);
+  itemsArray.push(item);
   clearAddItemFormInputs();
-  updateItemList(item_array[item_array.length-1]);
+  updateItemList(itemsArray[itemsArray.length-1]);
   sendDataToAPI(item);
 };
 /***************************************************************************************************
@@ -110,42 +110,50 @@ function clearAddItemFormInputs(){
  * @param {object} itemObj a single item object with price, name, and quantity inside
  */
 
-function renderItemOnDom(itemObj,index){
-  var name = $('<td>',{
+function renderItemOnDom(itemObj, index){
+  const name = $('<td>',{
     text: itemObj.name,
-    class: "itemName"
+    class: `itemName ${itemObj.id}`,
   });
-  var price = $('<td>').text(`${itemObj.price} USD`);
-  var quantity = $('<td>').text(itemObj.quantity);
-  var deleteButton = $('<button>',{
+  const price = $('<td>',{
+    text: itemObj.price,
+    class: `price ${itemObj.id}`
+  });
+  const quantity = $('<td>',{
+    text: itemObj.quantity,
+    class: `quantity ${itemObj.quantity}`
+  });
+  const deleteButton = $('<button>',{
     class: "btn btn-danger btn-xs",
     text: 'Delete'
   });
-  var editButton = $('<button>',{
+  const editButton = $('<button>',{
     class: "btn btn-warning btn-xs",
     text: 'Edit'
   });
   deleteButton.click(function(){
-    var currentRow = $(this).parent().parent().parent();//select the current table row
+    const currentRow = $(this).parent().parent().parent();//select the current table row
     if(!isChecked){//if "Do not ask this again" is not checked
-      showDeleteModal(itemObj,currentRow);
-    } else{
-      removeItem(itemObj,currentRow);
-    };
+    showDeleteModal(itemObj, currentRow);
+  } else{
+    removeItem(itemObj, currentRow);
+  };
   });
   editButton.click(function(){
-    showEditModal(itemObj,$('<td>'),index);
+    const currentRow = $(this).parent().parent().parent();//select the current table row
+    showEditModal(itemObj, currentRow);
   });
-  var buttonsDiv = $('<div>');
-  var deleteTD = $('<td>');
-  buttonsDiv.append(editButton,deleteButton).appendTo(deleteTD);
-  if(index%2==0){
-    var tableRowIndex = $('<tr>');
-    tableRowIndex.css({"background-color": "#eee"});
+  const buttonsDiv = $('<div>');
+  const deleteTD = $('<td>');
+  buttonsDiv.append(editButton, deleteButton).appendTo(deleteTD);
+  if(index%2 == 0){
+    var tableRowIndex = $('<tr>',{
+      class: "gray"
+    });
   } else{
     var tableRowIndex = $('<tr>');
   }
-  tableRowIndex.append(name,price,quantity,deleteTD).appendTo('tbody');
+  tableRowIndex.append(name, price, quantity, deleteTD).appendTo('tbody');
 };
 
 /***************************************************************************************************
@@ -164,11 +172,11 @@ function updateItemList(item){
  * @returns {number}
  */
 function calculateQuantityAverage(){
-  var sumofQuantitys = 0;
-  for(var a=0;a<item_array.length;a++){
-    sumofQuantitys+=parseInt(item_array[a].quantity);
+  var sumOfQuantitys = 0;
+  for(var a=0;a<itemsArray.length;a++){
+    sumOfQuantitys+=parseInt(itemsArray[a].quantity);
   };
-  var average = Math.round(sumofQuantitys/item_array.length);
+  var average = Math.round(sumOfQuantitys/itemsArray.length);
   return average;
 };
 /***************************************************************************************************
@@ -177,23 +185,23 @@ function calculateQuantityAverage(){
  * @returns {undefined} none
  */
 function renderQuantityAverage(averageQuantity){
-  if(item_array.length===0){
+  if(itemsArray.length === 0){
     averageQuantity=0;
   };
-  $('.avgquantity').text(averageQuantity);
+  $('.avgQuantity').text(averageQuantity);
 };
 
-function removeItem(item,row){
-  var itemIndex = item_array.indexOf(item);
-  var itemID = item_array[itemIndex].id;
-  item_array.splice(itemIndex,1);
+function removeItem(item, row){
+  const itemIndex = itemsArray.indexOf(item);
+  const itemID = itemsArray[itemIndex].id;
+  itemsArray.splice(itemIndex,1);
   row.remove();
   renderQuantityAverage(calculateQuantityAverage());
   deleteFromAPI(itemID);
 };
 
 function getItemData(){
-  var itemsAPI = {
+  const itemsAPI = {
     url: 'http://localhost:5700/api/read.php',
     success: displayItems,
     method: 'post',
@@ -204,22 +212,23 @@ function getItemData(){
 };
 
 function displayItems(response){
-  var inventory = response.data;
-  for(var s=0;s<inventory.length;s++){
-    item_array.push(inventory[s]);
+  const inventory = response.data;
+  for(let s=0;s<inventory.length;s++){
+    itemsArray.push(inventory[s]);
     renderItemOnDom(inventory[s],s);
   };
 };
 
 function sendDataToAPI(item){
-  var itemsAPI = {
+  const { name, price, quantity } = item;
+  const itemsAPI = {
     url: 'http://localhost:5700/api/create.php',
     success: addDataToAPI,
     method: 'post',
     data: {
-      name: item.name,
-      price: item.price,
-      quantity: item.quantity,
+      name,
+      price,
+      quantity
     },
     dataType: 'json',
     error: showError,
@@ -228,7 +237,7 @@ function sendDataToAPI(item){
 };
 
 function addDataToAPI(response){
-  var lastitem = item_array[item_array.length-1];
+  const lastitem = itemsArray[itemsArray.length-1];
   lastitem.id = response.last_id;
 };
 
@@ -237,9 +246,8 @@ function showError(response){
 };
 
 function deleteFromAPI(ID){
-  var itemsAPI = {
+  const itemsAPI = {
     url: 'http://localhost:5700/api/delete.php',
-    // success: showSuccess,
     method: 'post',
     data: {
       item_id: ID
@@ -250,19 +258,17 @@ function deleteFromAPI(ID){
   $.ajax(itemsAPI);
 };
 
-// function showSuccess(){
-//   console.log("item deleted!");
-// };
-
 function sendUpdateToAPI(item){
-  var updatedItem = {
+  const { name, price, quantity, id } = item;
+  const updatedItem = {
     url: 'http://localhost:5700/api/update.php',
+    success: () => location.reload(),
     method: 'post',
     data: {
-      name: item.name,
-      price: item.price,
-      quantity: item.quantity,
-      id: item.id
+      name,
+      price,
+      quantity,
+      id
     },
     dataType: 'JSON',
     error: showError,
@@ -271,10 +277,10 @@ function sendUpdateToAPI(item){
 };
 
 function showDeleteModal(item,row){
-  var modal = document.getElementById('deleteModal')
-  var span = document.getElementsByClassName("close")[0];
-  var deleteBtn = document.getElementById('delButton');
-  var cancelBtn = document.getElementById('cancelButton');
+  let modal = document.getElementById('deleteModal')
+  let span = document.getElementsByClassName("close")[0];
+  let deleteBtn = document.getElementById('delButton');
+  let cancelBtn = document.getElementById('cancelButton');
   modal.style.display = "block";//display modal
   span.onclick = function() {//exit modal when click on x
     modal.style.display = "none";
@@ -296,16 +302,16 @@ function showDeleteModal(item,row){
 };
 
 function isBoxChecked() {
-  if(document.getElementById("noAsking").checked===true){
+  if(document.getElementById("noAsking").checked === true){
     isChecked = true;
   } else{
     isChecked = false;
   };
 };
 
-function areInputsValid(name,price,quantity){
-  var invalidCounter = 0;
-  if (name<2 || !isNaN(name) ){ 
+function areInputsValid(name, price, quantity){
+  let invalidCounter = 0;
+  if (name < 2 || !isNaN(name) ){ 
     invalidCounter++;
     $('#itemName').val("");
     $('#itemName').attr("placeholder", "Enter at least 2 letters").addClass('red error');
@@ -323,7 +329,7 @@ function areInputsValid(name,price,quantity){
     $('#itemQuantity').attr("placeholder", "Enter a valid number").addClass('red error');
     $('.glyphicon-shopping-cart').addClass('glyphError');
   };
-  if(invalidCounter===0){
+  if(invalidCounter === 0){
     return true;
   };
 };
@@ -346,11 +352,11 @@ function removeRedFromQuantityForm(){
   $('.glyphicon-shopping-cart').removeClass('glyphError');
 };
 
-function showEditModal(item,td,index){
-  var modal = document.getElementById('editModal')
-  var span = document.getElementById("closeEdit");
-  var editBtn = document.getElementById('editButton');
-  var cancelEditBtn = document.getElementById('editCancelButton');
+function showEditModal(item, row){
+  let modal = document.getElementById('editModal')
+  let span = document.getElementById("closeEdit");
+  let editBtn = document.getElementById('editButton');
+  let cancelEditBtn = document.getElementById('editCancelButton');
   modal.style.display = "block";//display modal
 
   //Dislayed current value in input fields
@@ -364,11 +370,11 @@ function showEditModal(item,td,index){
   };
   window.onclick = function(event) {//exit modal when click anywhere outside of modal
     if (event.target == modal) {
-      modal.style.display = "none";
+      modal.style.displleletay = "none";
     };
   };
   editBtn.onclick = function() {//when edit button on modal is clicked
-    editDisplayeditem(item.id)
+    editDisplayeditem(item,row)
     modal.style.display = "none";
   };
   cancelEditBtn.onclick = function() {
@@ -376,24 +382,22 @@ function showEditModal(item,td,index){
   };
 };
 
-function editDisplayeditem(updatedId){
-  // var nameInput = $('#itemName_edit').val();
-  // var itemIndex = item_array.indexOf(item);
-  // if(nameInput.length>1){
-  //   item_array[itemIndex].name=$('#itemName_edit').val();
-  // };
-  // td.text(item_array[itemIndex].name);
-  var item = {};
-  item.name = $('#name_edit').val();
-  item.price = $('#price_edit').val();
-  item.quantity = $('#quantity_edit').val();
-  item.id = parseInt(updatedId);
-  if(!areInputsValid(item.name,item.price,item.quantity)){//if any of the forms is invalid, disable adding item
+function editDisplayeditem(oldItem,row){
+  const id = parseInt(oldItem.id);
+  const name = $('#name_edit').val();
+  const quantity = $('#quantity_edit').val();
+  const price = $('#price_edit').val();
+  const item = { id, name, quantity, price };
+  if(!areInputsValid(item.name, item.price, item.quantity)){//if any of the forms is invalid, disable adding item
     return;
   };
-  item_array.push(item);
-  // clearAddItemFormInputs();
-  // updateItemList(item_array[item_array.length-1]);
+  // row.remove();
+  // debugger;
+  // var itemIndex = itemsArray.indexOf(oldItem);
+  // itemsArray[itemIndex].name = item.name;
+  // itemsArray[itemIndex].price = item.price;
+  // itemsArray[itemIndex].quantity = item.quantity;
+  // updateItemList(itemsArray[itemIndex]);
   sendUpdateToAPI(item);
 };
 
