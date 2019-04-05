@@ -45,12 +45,45 @@ class Items{
     $stmt->bindParam(':quantity', $this->quantity);
     // Execute query
     if($stmt->execute()) {
+      $last_id = $this->conn->lastInsertId();
+      // echo "New record created successfully. Last inserted ID is: " . $last_id;
+      // echo json_encode($last_id);
+      echo json_encode(
+        array('last_id' => $last_id)
+      );
       return true;
-  }
-  // Print error if something goes wrong
-  printf("Error: %s.\n", $stmt->error);
-  return false;
-  }
+    }
+    // Print error if something goes wrong
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+    }
+  
+  // Update An Item
+  public function update() {
+    // Update query
+    $query = 'UPDATE Items
+              SET name = :name, price = :price, quantity = :quantity
+              WHERE id = :id';
+    // Prepare statement
+    $stmt = $this->conn->prepare($query);
+    // Clean data
+    $this->name = htmlspecialchars(strip_tags($this->name));
+    $this->price = htmlspecialchars(strip_tags($this->price));
+    $this->quantity = htmlspecialchars(strip_tags($this->quantity));
+    $this->id = htmlspecialchars(strip_tags($this->id));
+    // Bind data
+    $stmt->bindParam(':name', $this->name);
+    $stmt->bindParam(':price', $this->price);
+    $stmt->bindParam(':quantity', $this->quantity);
+    $stmt->bindParam(':id', $this->id);
+    // Execute query
+    if($stmt->execute()) {
+      return true;
+    }
+    // Print error if something goes wrong
+    printf("Error: %s.\n", $stmt->error);
+    return false;
+    }
 
   // Delete Item
   public function delete() {

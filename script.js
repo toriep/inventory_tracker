@@ -134,7 +134,7 @@ function renderItemOnDom(itemObj,index){
     };
   });
   editButton.click(function(){
-    showEditModal(itemObj,$('<td>'));
+    showEditModal(itemObj,$('<td>'),index);
   });
   var buttonsDiv = $('<div>');
   var deleteTD = $('<td>');
@@ -221,7 +221,7 @@ function sendDataToAPI(item){
       price: item.price,
       quantity: item.quantity,
     },
-    dataType: 'JSON',
+    dataType: 'json',
     error: showError,
     }
   $.ajax(itemsAPI);
@@ -229,11 +229,11 @@ function sendDataToAPI(item){
 
 function addDataToAPI(response){
   var lastitem = item_array[item_array.length-1];
-  lastitem.id = response.new_id;
+  lastitem.id = response.last_id;
 };
 
-function showError(){
-  console.log('AJAX call failed');
+function showError(response){
+  console.log('AJAX call failed: ' + response);
 };
 
 function deleteFromAPI(ID){
@@ -253,6 +253,22 @@ function deleteFromAPI(ID){
 // function showSuccess(){
 //   console.log("item deleted!");
 // };
+
+function sendUpdateToAPI(item){
+  var updatedItem = {
+    url: 'http://localhost:5700/api/update.php',
+    method: 'post',
+    data: {
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      id: item.id
+    },
+    dataType: 'JSON',
+    error: showError,
+    }
+  $.ajax(updatedItem);
+};
 
 function showDeleteModal(item,row){
   var modal = document.getElementById('deleteModal')
@@ -330,13 +346,20 @@ function removeRedFromQuantityForm(){
   $('.glyphicon-shopping-cart').removeClass('glyphError');
 };
 
-function showEditModal(item,td){
+function showEditModal(item,td,index){
   var modal = document.getElementById('editModal')
   var span = document.getElementById("closeEdit");
   var editBtn = document.getElementById('editButton');
   var cancelEditBtn = document.getElementById('editCancelButton');
   modal.style.display = "block";//display modal
-  span.onclick = function() {//exit modal when click on x
+
+  //Dislayed current value in input fields
+  $('#name_edit').val(item.name);
+  $('#price_edit').val(item.price);
+  $('#quantity_edit').val(item.quantity);
+
+  //exit modal when click on x
+  span.onclick = function() {
     modal.style.display = "none";
   };
   window.onclick = function(event) {//exit modal when click anywhere outside of modal
@@ -345,7 +368,7 @@ function showEditModal(item,td){
     };
   };
   editBtn.onclick = function() {//when edit button on modal is clicked
-    editDisplayeditem(item,td)
+    editDisplayeditem(item.id)
     modal.style.display = "none";
   };
   cancelEditBtn.onclick = function() {
@@ -353,12 +376,24 @@ function showEditModal(item,td){
   };
 };
 
-function editDisplayeditem(item,td){
-  var nameInput = $('#itemName_edit').val();
-  var itemIndex = item_array.indexOf(item);
-  if(nameInput.length>1){
-    item_array[itemIndex].name=$('#itemName_edit').val();
+function editDisplayeditem(updatedId){
+  // var nameInput = $('#itemName_edit').val();
+  // var itemIndex = item_array.indexOf(item);
+  // if(nameInput.length>1){
+  //   item_array[itemIndex].name=$('#itemName_edit').val();
+  // };
+  // td.text(item_array[itemIndex].name);
+  var item = {};
+  item.name = $('#name_edit').val();
+  item.price = $('#price_edit').val();
+  item.quantity = $('#quantity_edit').val();
+  item.id = parseInt(updatedId);
+  if(!areInputsValid(item.name,item.price,item.quantity)){//if any of the forms is invalid, disable adding item
+    return;
   };
-  td.text(item_array[itemIndex].name)
+  item_array.push(item);
+  // clearAddItemFormInputs();
+  // updateItemList(item_array[item_array.length-1]);
+  sendUpdateToAPI(item);
 };
 
