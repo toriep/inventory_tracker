@@ -2,7 +2,7 @@
   // Headers
   header('Access-Control-Allow-Origin: *');
   header('Content-Type: application/json');
-  header('Access-Control-Allow-Methods: item');
+  header('Access-Control-Allow-Methods: POST');
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
   
   include_once('../config/Database.php');
@@ -24,9 +24,10 @@
   $item->quantity = $quantity;
   // Create item
   if($item->create()) {
-    echo json_encode(
-      array('message' => 'Item Created')
-    );
+    // echo json_encode(
+    //   array('message' => 'Item Created')
+    // );
+    return true;
   } else {
     echo json_encode(
       array('message' => 'Item Not Created')
