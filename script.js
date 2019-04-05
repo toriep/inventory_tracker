@@ -202,7 +202,7 @@ function removeItem(item, row){
 
 function getItemData(){
   const itemsAPI = {
-    url: 'http://localhost:5700/api/read.php',
+    url: readUrl,
     success: displayItems,
     method: 'post',
     dataType: 'json',
@@ -222,7 +222,7 @@ function displayItems(response){
 function sendDataToAPI(item){
   const { name, price, quantity } = item;
   const itemsAPI = {
-    url: 'http://localhost:5700/api/create.php',
+    url: createUrl,
     success: addDataToAPI,
     method: 'post',
     data: {
@@ -247,7 +247,7 @@ function showError(response){
 
 function deleteFromAPI(ID){
   const itemsAPI = {
-    url: 'http://localhost:5700/api/delete.php',
+    url: deleteUrl,
     method: 'post',
     data: {
       item_id: ID
@@ -261,7 +261,7 @@ function deleteFromAPI(ID){
 function sendUpdateToAPI(item){
   const { name, price, quantity, id } = item;
   const updatedItem = {
-    url: 'http://localhost:5700/api/update.php',
+    url: updateUrl,
     success: () => location.reload(),
     method: 'post',
     data: {
@@ -392,7 +392,6 @@ function editDisplayeditem(oldItem,row){
     return;
   };
   // row.remove();
-  // debugger;
   // var itemIndex = itemsArray.indexOf(oldItem);
   // itemsArray[itemIndex].name = item.name;
   // itemsArray[itemIndex].price = item.price;
