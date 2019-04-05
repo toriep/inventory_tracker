@@ -13,44 +13,44 @@
     <div class="form-group">
         <!-- only show this element when the isn't on mobile -->
         <h1 class="hidden-xs page-header">Inventory Table
-            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
+            <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small>
         </h1>
         <!-- only show this element when the user gets to a mobile version -->
         <h3 class="visible-xs page-header col-xs-11">Inventory Table
-            <small class="pull-right">Grade Average : <span class="avgGrade label label-default"></span></small>
+            <small class="pull-right">Quantity Average : <span class="avgQuantity label label-default"></span></small>
         </h3>
     </div>
-    <div class="student-add-form form-group col-lg-3 col-med-3 col-sm-4 col-xs-12 pull-right">
-        <h4>Add Student</h4>
+    <div class="item-add-form form-group col-lg-3 col-med-3 col-sm-4 col-xs-12 pull-right">
+        <h4>Add Item</h4>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="form-control" name="studentName" id="studentName" placeholder="Student Name" onblur="removeRedFromStudentForm()">
+            <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Item Name" onblur="removeRedFromItemForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-list-alt"></span>
             </span>
-            <input type="text" class="form-control" name="course" id="course" placeholder="Student Course" onblur="removeRedFromCourseForm()">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Item Price" onblur="removeRedFromPriceForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="form-control" name="studentGrade" id="studentGrade" placeholder="Student Grade"  onblur="removeRedFromGradeForm()">
+            <input type="text" class="form-control" name="itemQuantity" id="itemQuantity" placeholder="Item Quantity"  onblur="removeRedFromQuantityForm()">
         </div>
         <button type="button" class="btn btn-success" id="addBtn" onclick="handleAddClicked()">Add</button>
         <button type="button" class="btn btn-default" onclick="handleCancelClick()">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="getStudentData()">Get Data</button>
+        <button type="button" class="btn btn-primary" onclick="getItemData()">Get Data</button>
     </div>
-    <div class="student-list-container col-xs-12 col-sm-8 col-md-8 col-lg-9 ">
-        <table class="table student-list">
+    <div class="item-list-container col-xs-12 col-sm-8 col-md-8 col-lg-9 ">
+        <table class="table item-list">
             <thead>
             <tr>
                 <th>Item</th>
-                <th>Category</th>
-                <th>Stock</th>
+                <th>Quantity</th>
+                <th>Price</th>
                 <th>Operations</th>
             </tr>
             </thead>
@@ -62,7 +62,7 @@
     <div id="deleteModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <h2>Delete this student?</h2><br>
+          <h2>Delete this item?</h2><br>
           <button id="delButton" class="btn btn-danger">Delete</button>
           <button id="cancelButton" class="btn btn-secondary">Cancel</button>
           <div class="form-check">
@@ -78,23 +78,23 @@
             <div class="modal-content">
               <span class="close" id="closeEdit">&times;</span>
               <h4>Forms Edit</h4>
-              <div class="form-group input-group student">
+              <div class="form-group input-group item">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-user"></span>
                   </span>
-                  <input type="text" class="form-control" name="studentName" id="studentName_edit" placeholder="Student Name" onblur="removeRedFromStudentForm()">
+                  <input type="text" class="form-control" name="itemName" id="itemName_edit" placeholder="Item Name" onblur="removeRedFromItemForm()">
               </div>
-              <div class="form-group input-group course">
+              <div class="form-group input-group price">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-list-alt"></span>
                   </span>
-                  <input type="text" class="form-control" name="course" id="course_edit" placeholder="Student Course" onblur="removeRedFromCourseForm()">
+                  <input type="text" class="form-control" name="price" id="price_edit" placeholder="Item Price" onblur="removeRedFromPriceForm()">
               </div>
-              <div class="form-group input-group grade">
+              <div class="form-group input-group quantity">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-education"></span>
                   </span>
-                  <input type="text" class="form-control" name="studentGrade" id="studentGrade_edit" placeholder="Student Grade"  onblur="removeRedFromGradeForm()">
+                  <input type="text" class="form-control" name="itemQuantity" id="itemQuantity_edit" placeholder="Item Quantity"  onblur="removeRedFromQuantityForm()">
               </div>
               <button id="editButton" class="btn btn-warning">Edit</button>
               <button id="editCancelButton" class="btn btn-secondary">Cancel</button>
