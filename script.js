@@ -41,15 +41,15 @@ function initializeApp(){
 function addClickHandlersToElements(){
   $('#itemName').focusin(function(){
     $('#itemName').removeClass('error');
-    $('.glyphicon-user').removeClass('glyphError');
+    $('.glyphicon-tag').removeClass('glyphError');
   });
   $('#price').focusin(function(){
     $('#price').removeClass('error');
-    $('.glyphicon-list-alt').removeClass('glyphError');
+    $('.glyphicon-usd').removeClass('glyphError');
   });
   $('#itemQuantity').focusin(function(){
     $('#itemQuantity').removeClass('error');
-    $('.glyphicon-education').removeClass('glyphError');
+    $('.glyphicon-shopping-cart').removeClass('glyphError');
   });
 
   $("#itemQuantity").on("keyup", function(event) {
@@ -140,10 +140,8 @@ function renderItemOnDom(itemObj,index){
   var deleteTD = $('<td>');
   buttonsDiv.append(editButton,deleteButton).appendTo(deleteTD);
   if(index%2==0){
-    debugger;
-    var tableRowIndex = $('<tr>',{
-      class: "meow",
-    });
+    var tableRowIndex = $('<tr>');
+    tableRowIndex.css({"background-color": "#eee"});
   } else{
     var tableRowIndex = $('<tr>');
   }
@@ -295,19 +293,19 @@ function areInputsValid(name,price,quantity){
     invalidCounter++;
     $('#itemName').val("");
     $('#itemName').attr("placeholder", "Enter at least 2 letters").addClass('red error');
-    $('.glyphicon-user').addClass('glyphError');
+    $('.glyphicon-tag').addClass('glyphError');
   };
   if(isNaN(price) || price.length<1){ 
     invalidCounter++
     $('#price').val("");
     $('#price').attr("placeholder", "Enter a valid number").addClass('red error');
-    $('.glyphicon-list-alt').addClass('glyphError');
+    $('.glyphicon-usd').addClass('glyphError');
   };
   if(isNaN(quantity) || quantity.length<1){//if item quantity input is not a number
     invalidCounter++
     $('#itemQuantity').val("");//clear the item quantity form
     $('#itemQuantity').attr("placeholder", "Enter a valid number").addClass('red error');
-    $('.glyphicon-education').addClass('glyphError');
+    $('.glyphicon-shopping-cart').addClass('glyphError');
   };
   if(invalidCounter===0){
     return true;
@@ -317,19 +315,19 @@ function areInputsValid(name,price,quantity){
 function removeRedFromItemForm(){
   $('#itemName').removeClass('red error').attr("placeholder", "item Name");
   $('#itemName').closest().removeClass('red error');
-  $('.glyphicon-user').removeClass('glyphError');
+  $('.glyphicon-tag').removeClass('glyphError');
 };
 
 function removeRedFromPriceForm(){
   $('#price').removeClass('red error').attr("placeholder", "item price");
   $('#price').closest().removeClass('red error');
-  $('.glyphicon-list-alt').removeClass('glyphError');
+  $('.glyphicon-usd').removeClass('glyphError');
 };
 
 function removeRedFromQuantityForm(){
   $('#itemQuantity').removeClass('red error').attr("placeholder", "item quantity");
   $('#itemQuantity').closest().removeClass('red error');
-  $('.glyphicon-education').removeClass('glyphError');
+  $('.glyphicon-shopping-cart').removeClass('glyphError');
 };
 
 function showEditModal(item,td){
