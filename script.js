@@ -207,12 +207,9 @@ function removeStudent(student,row){
 
 function getStudentData(){
       var SGT_API = {
-            url: 'http://s-apis.learningfuze.com/sgt/get',
+            url: 'http://localhost:5700/read.php',
             success: displayLFZ,
             method: 'post',
-            data: {
-                api_key: "5A8UhhZQaW"
-            },
             dataType: 'json',
             error: showError,
         }
