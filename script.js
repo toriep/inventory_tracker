@@ -10,22 +10,21 @@ $(document).ready(initializeApp);
  * Define all global variables here.  
  */
 /***********************
- * student_array - global array to hold student objects
+ * item_array - global array to hold item objects
  * @type {Array}
- * example of student_array after input: 
- * student_array = [
- *  { name: 'Jake', course: 'Math', grade: 85 },
- *  { name: 'Jill', course: 'Comp Sci', grade: 85 }
+ * example of item_array after input: 
+ * item_array = [
+ *  { name: 'Jake', price: 'Math', quantity: 85 },
+ *  { name: 'Jill', price: 'Comp Sci', quantity: 85 }
  * ];
  */
-var student_array = [];
+var item_array = [];
 var isChecked;
-var eventListener;
 
 
-// var nameForm = $('#studentName');
-// var courseForm = $('#course');
-// var gradeForm = $('#studentGrade');
+// var nameForm = $('#itemName');
+// var priceForm = $('#price');
+// var quantityForm = $('#itemquantity');
 /***************************************************************************************************
 * initializeApp 
 * @params {undefined} none
@@ -35,7 +34,7 @@ var eventListener;
 function initializeApp(){
       isChecked = document.getElementById("noAsking").checked;
       addClickHandlersToElements();
-      getStudentData(); 
+      getItemData(); 
 }
 
 /***************************************************************************************************
@@ -46,21 +45,20 @@ function initializeApp(){
 */
 function addClickHandlersToElements(){
       console.log('click handlers run');
-      $('#studentName').focusin(function(){
-            $('#studentName').removeClass('error');
-            $('.glyphicon-user').removeClass('glyphError');
+      $('#itemName').focusin(function(){
+            $('#itemName').removePrice('error');
+            $('.glyphicon-user').removePrice('glyphError');
       });
-      $('#course').focusin(function(){
-            $('#course').removeClass('error');
-            $('.glyphicon-list-alt').removeClass('glyphError');
+      $('#price').focusin(function(){
+            $('#price').removePrice('error');
+            $('.glyphicon-list-alt').removePrice('glyphError');
       });
-      $('#studentGrade').focusin(function(){
-            $('#studentGrade').removeClass('error');
-            $('.glyphicon-education').removeClass('glyphError');
+      $('#itemquantity').focusin(function(){
+            $('#itemquantity').removePrice('error');
+            $('.glyphicon-education').removePrice('glyphError');
       });
 
-      eventListener = $("#studentGrade");
-      eventListener.on("keyup", function(event) {
+      $("#itemquantity").on("keyup", function(event) {
             if (event.keyCode === 13) {//if enter key is released
             $("#addBtn").click();//runs the function attaches to click event off add button
             }
@@ -79,133 +77,133 @@ function addClickHandlersToElements(){
        none
  */
 function handleAddClicked(){
-      addStudent();
+      addItem();
 }
 /***************************************************************************************************
- * handleCancelClicked - Event Handler when user clicks the cancel button, should clear out student form
+ * handleCancelClicked - Event Handler when user clicks the cancel button, should clear out item form
  * @param: {undefined} none
  * @returns: {undefined} none
- * @calls: clearAddStudentFormInputs
+ * @calls: clearAddItemFormInputs
  */
 function handleCancelClick(){
-      clearAddStudentFormInputs();
+      clearAddItemFormInputs();
 }
 /***************************************************************************************************
- * addStudent - creates a student objects based on input fields in the form and adds the object to global student array
+ * addItem - creates a item objects based on input fields in the form and adds the object to global item array
  * @param {undefined} none
  * @return undefined
- * @calls clearAddStudentFormInputs, updateStudentList
+ * @calls clearAddItemFormInputs, updateItemList
  */
-function addStudent(){
-      var student = {};
-      student.name = $('#studentName').val();
-      student.course = $('#course').val();
-      student.grade = $('#studentGrade').val();
-      if(!areInputsValid(student.name,student.course,student.grade)){//if any of the forms is invalid, disable adding student
+function addItem(){
+      var item = {};
+      item.name = $('#itemName').val();
+      item.price = $('#price').val();
+      item.quantity = $('#itemquantity').val();
+      if(!areInputsValid(item.name,item.price,item.quantity)){//if any of the forms is invalid, disable adding item
             return;
       }
-      student_array.push(student);
-      console.log("Student Array: ", student_array);
-      clearAddStudentFormInputs();
-      updateStudentList(student_array[student_array.length-1]);
-      sendDataToAPI(student);
+      item_array.push(item);
+      console.log("item Array: ", item_array);
+      clearAddItemFormInputs();
+      updateItemList(item_array[item_array.length-1]);
+      sendDataToAPI(item);
 }
 /***************************************************************************************************
- * clearAddStudentForm - clears out the form values based on inputIds variable
+ * clearAddItemForm - clears out the form values based on inputIds variable
  */
-function clearAddStudentFormInputs(){
-      console.log('Student forms cleared');
-      $('#studentName').val("");
-      $('#course').val("");
-      $('#studentGrade').val("");
+function clearAddItemFormInputs(){
+      console.log('item forms cleared');
+      $('#itemName').val("");
+      $('#price').val("");
+      $('#itemquantity').val("");
 }
 /***************************************************************************************************
- * renderStudentOnDom - take in a student object, create html elements from the values and then append the elements
- * into the .student_list tbody
- * @param {object} studentObj a single student object with course, name, and grade inside
+ * renderitemOnDom - take in a item object, create html elements from the values and then append the elements
+ * into the .item_list tbody
+ * @param {object} itemObj a single item object with price, name, and quantity inside
  */
 
- //<button type="button" class="btn btn-danger">Danger</button>
-function renderStudentOnDom(studentObj){
+ //<button type="button" price="btn btn-danger">Danger</button>
+function renderitemOnDom(itemObj){
       var name = $('<td>',{
-            text: studentObj.name,
-            class: "studentName"
+            text: itemObj.name,
+            price: "itemName"
       })
-      var course = $('<td>').text(studentObj.course);
-      var grade = $('<td>').text(studentObj.grade);
+      var price = $('<td>').text(itemObj.price);
+      var quantity = $('<td>').text(itemObj.quantity);
       var deleteButton = $('<button>',{
-            class: "btn btn-danger btn-xs",
+            price: "btn btn-danger btn-xs",
             text: 'Delete'
       })
       var editButton = $('<button>',{
-            class: "btn btn-warning btn-xs",
+            price: "btn btn-warning btn-xs",
             text: 'Edit'
       })
       deleteButton.click(function(){
             var currentRow = $(this).parent().parent().parent();//select the current table row
             if(!isChecked){//if "Do not ask this again" is not checked
-                  showDeleteModal(studentObj,currentRow);
+                  showDeleteModal(itemObj,currentRow);
             } else{
-                  removeStudent(studentObj,currentRow);
+                  removeItem(itemObj,currentRow);
             }
       });
       editButton.click(function(){
-            showEditModal(studentObj,$('<td>'));
+            showEditModal(itemObj,$('<td>'));
       })
       var buttonsDiv = $('<div>');
       var deleteTD = $('<td>');
       buttonsDiv.append(editButton,deleteButton).appendTo(deleteTD);
       var tableRowIndex = $('<tr>');
-      tableRowIndex.append(name,course,grade,deleteTD).appendTo('tbody');
+      tableRowIndex.append(name,price,quantity,deleteTD).appendTo('tbody');
 }
 
 /***************************************************************************************************
- * updateStudentList - centralized function to update the average and call student list update
- * @param students {array} the array of student objects
+ * updateItemList - centralized function to update the average and call item list update
+ * @param items {array} the array of item objects
  * @returns {undefined} none
- * @calls renderStudentOnDom, calculateGradeAverage, renderGradeAverage
+ * @calls renderitemOnDom, calculateQuantityAverage, renderquantityAverage
  */
-function updateStudentList(student){
-      var currentStudent = student;
-      renderStudentOnDom(currentStudent);
-      renderGradeAverage(calculateGradeAverage());
+function updateItemList(item){
+      var currentitem = item;
+      renderitemOnDom(currentitem);
+      renderquantityAverage(calculateQuantityAverage());
 }
 /***************************************************************************************************
- * calculateGradeAverage - loop through the global student array and calculate average grade and return that value
- * @param: {array} students  the array of student objects
+ * calculateQuantityAverage - loop through the global item array and calculate average quantity and return that value
+ * @param: {array} items  the array of item objects
  * @returns {number}
  */
-function calculateGradeAverage(){
-      var sumOfGrades = 0;
-      for(var a=0;a<student_array.length;a++){
-            sumOfGrades+=parseInt(student_array[a].grade);
+function calculateQuantityAverage(){
+      var sumOfquantitys = 0;
+      for(var a=0;a<item_array.length;a++){
+            sumOfquantitys+=parseInt(item_array[a].quantity);
       }
-      var average = Math.round(sumOfGrades/student_array.length);
+      var average = Math.round(sumOfquantitys/item_array.length);
       console.log("Current average: "+ average);
       return average;
 }
 /***************************************************************************************************
- * renderGradeAverage - updates the on-page grade average
- * @param: {number} average    the grade average
+ * renderquantityAverage - updates the on-page quantity average
+ * @param: {number} average    the quantity average
  * @returns {undefined} none
  */
-function renderGradeAverage(averageGrade){
-      if(student_array.length===0){
-            averageGrade=0;
+function renderquantityAverage(averagequantity){
+      if(item_array.length===0){
+            averagequantity=0;
       }
-      $('.avgGrade').text(averageGrade);
+      $('.avgquantity').text(averagequantity);
 }
 
-function removeStudent(student,row){
-      var studentIndex = student_array.indexOf(student);
-      var studentID = student_array[studentIndex].id;
-      student_array.splice(studentIndex,1);
+function removeItem(item,row){
+      var itemIndex = item_array.indexOf(item);
+      var itemID = item_array[itemIndex].id;
+      item_array.splice(itemIndex,1);
       row.remove();
-      renderGradeAverage(calculateGradeAverage());
-      deleteFromAPI(studentID);
+      renderquantityAverage(calculateQuantityAverage());
+      deleteFromAPI(itemID);
 }
 
-function getStudentData(){
+function getItemData(){
       var SGT_API = {
             url: 'http://localhost:5700/read.php',
             success: displayLFZ,
@@ -217,25 +215,24 @@ function getStudentData(){
 }
 
 function displayLFZ(response){
-  debugger;
-      var july18Cohort = response.data;
-      for(var s=0;s<july18Cohort.length;s++){
-            student_array.push(july18Cohort[s]);
-            updateStudentList(july18Cohort[s]);
+      var inventory = response.data;
+      for(var s=0;s<inventory.length;s++){
+            item_array.push(inventory[s]);
+            updateItemList(inventory[s]);
       }
-      console.log("Student_array after pulling API data: ", student_array);
+      console.log("item_array after pulling API data: ", item_array);
 }
 
-function sendDataToAPI(student){
+function sendDataToAPI(item){
       var SGT_API = {
             url: 'http://s-apis.learningfuze.com/sgt/create',
             success: addDataToAPI,
             method: 'post',
             data: {
                 api_key: "5A8UhhZQaW",
-                name: student.name,
-                course: student.course,
-                grade: student.grade,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
             },
             dataType: 'JSON',
             error: showError,
@@ -244,9 +241,9 @@ function sendDataToAPI(student){
 }
 
 function addDataToAPI(response){
-      var lastStudent = student_array[student_array.length-1];
+      var lastitem = item_array[item_array.length-1];
       console.log('success!');
-      lastStudent.id = response.new_id;
+      lastitem.id = response.new_id;
 }
 
 function showError(){
@@ -260,7 +257,7 @@ function deleteFromAPI(ID){
             method: 'post',
             data: {
                 api_key: "5A8UhhZQaW",
-                student_id: ID
+                item_id: ID
             },
             dataType: 'JSON',
             error: showError,
@@ -269,12 +266,12 @@ function deleteFromAPI(ID){
 }
 
 function showSuccess(){
-      console.log("Student deleted!");
+      console.log("item deleted!");
 }
 
-function showDeleteModal(student,row){
+function showDeleteModal(item,row){
       var modal = document.getElementById('deleteModal')
-      var span = document.getElementsByClassName("close")[0];
+      var span = document.getElementsBypriceName("close")[0];
       var deleteBtn = document.getElementById('delButton');
       var cancelBtn = document.getElementById('cancelButton');
       modal.style.display = "block";//display modal
@@ -287,7 +284,7 @@ function showDeleteModal(student,row){
             }
       }  
       deleteBtn.onclick = function(){//when delete button on modal is clicked
-            removeStudent(student,row);
+            removeItem(item,row);
             isBoxChecked();
             modal.style.display = "none";
       }
@@ -305,50 +302,50 @@ function isBoxChecked() {
       }
 }
 
-function areInputsValid(name,course,grade){
+function areInputsValid(name,price,quantity){
       var invalidCounter = 0;
       if (name<2 ){ 
             invalidCounter++;
-            $('#studentName').val("");
-            $('#studentName').attr("placeholder", "Enter at least 2 letters").addClass('red error');
-            $('.glyphicon-user').addClass('glyphError');
+            $('#itemName').val("");
+            $('#itemName').attr("placeholder", "Enter at least 2 letters").addprice('red error');
+            $('.glyphicon-user').addprice('glyphError');
       }
-      if(course<2 ){ 
+      if(price<2 ){ 
             invalidCounter++
-            $('#course').val("");
-            $('#course').attr("placeholder", "Enter at least 2 letters").addClass('red error');
-            $('.glyphicon-list-alt').addClass('glyphError');
+            $('#price').val("");
+            $('#price').attr("placeholder", "Enter at least 2 letters").addprice('red error');
+            $('.glyphicon-list-alt').addprice('glyphError');
       }
-      if(isNaN(grade) || grade.length<1){//if student grade input is not a number
+      if(isNaN(quantity) || quantity.length<1){//if item quantity input is not a number
             invalidCounter++
-            $('#studentGrade').val("");//clear the student grade form
-            $('#studentGrade').attr("placeholder", "Enter a valid number").addClass('red error');
-            $('.glyphicon-education').addClass('glyphError');
+            $('#itemquantity').val("");//clear the item quantity form
+            $('#itemquantity').attr("placeholder", "Enter a valid number").addprice('red error');
+            $('.glyphicon-education').addprice('glyphError');
       }
       if(invalidCounter===0){
             return true;
       }
 }
 
-function removeRedFromStudentForm(){
-      $('#studentName').removeClass('red error').attr("placeholder", "Student Name");
-      $('#studentName').closest().removeClass('red error');
-      $('.glyphicon-user').removeClass('glyphError');
+function removeRedFromItemForm(){
+      $('#itemName').removePrice('red error').attr("placeholder", "item Name");
+      $('#itemName').closest().removePrice('red error');
+      $('.glyphicon-user').removePrice('glyphError');
 }
 
-function removeRedFromCourseForm(){
-      $('#course').removeClass('red error').attr("placeholder", "Student Course");
-      $('#course').closest().removeClass('red error');
-      $('.glyphicon-list-alt').removeClass('glyphError');
+function removeRedFromPriceForm(){
+      $('#price').removePrice('red error').attr("placeholder", "item price");
+      $('#price').closest().removePrice('red error');
+      $('.glyphicon-list-alt').removePrice('glyphError');
 }
 
-function removeRedFromGradeForm(){
-      $('#studentGrade').removeClass('red error').attr("placeholder", "Student Grade");
-      $('#studentGrade').closest().removeClass('red error');
-      $('.glyphicon-education').removeClass('glyphError');
+function removeRedFromQuantityForm(){
+      $('#itemquantity').removePrice('red error').attr("placeholder", "item quantity");
+      $('#itemquantity').closest().removePrice('red error');
+      $('.glyphicon-education').removePrice('glyphError');
 }
 
-function showEditModal(student,td){
+function showEditModal(item,td){
       var modal = document.getElementById('editModal')
       var span = document.getElementById("closeEdit");
       var editBtn = document.getElementById('editButton');
@@ -363,7 +360,7 @@ function showEditModal(student,td){
             }
       }  
       editBtn.onclick = function(){//when edit button on modal is clicked
-            editDisplayedStudent(student,td)
+            editDisplayeditem(item,td)
             modal.style.display = "none";
       }
       cancelEditBtn.onclick = function(){
@@ -371,12 +368,12 @@ function showEditModal(student,td){
       }
 }
 
-function editDisplayedStudent(student,td){
-      var nameInput = $('#studentName_edit').val();
-      var studentIndex = student_array.indexOf(student);
+function editDisplayeditem(item,td){
+      var nameInput = $('#itemName_edit').val();
+      var itemIndex = item_array.indexOf(item);
       if(nameInput.length>1){
-            student_array[studentIndex].name=$('#studentName_edit').val();
+            item_array[itemIndex].name=$('#itemName_edit').val();
       }
-      td.text(student_array[studentIndex].name)
+      td.text(item_array[itemIndex].name)
 }
 
