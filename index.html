@@ -21,24 +21,24 @@
         </h3>
     </div>
     <div class="item-add-form form-group col-lg-3 col-med-3 col-sm-4 col-xs-12 pull-right">
-        <h4>Add item</h4>
+        <h4>Add Item</h4>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-user"></span>
             </span>
-            <input type="text" class="form-control" name="itemName" id="itemName" placeholder="item Name" onblur="removeRedFromItemForm()">
+            <input type="text" class="form-control" name="itemName" id="itemName" placeholder="Item Name" onblur="removeRedFromItemForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-list-alt"></span>
             </span>
-            <input type="text" class="form-control" name="price" id="price" placeholder="item price" onblur="removeRedFromPriceForm()">
+            <input type="text" class="form-control" name="price" id="price" placeholder="Item Price" onblur="removeRedFromPriceForm()">
         </div>
         <div class="form-group input-group">
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-education"></span>
             </span>
-            <input type="text" class="form-control" name="itemquantity" id="itemquantity" placeholder="item quantity"  onblur="removeRedFromQuantityForm()">
+            <input type="text" class="form-control" name="itemQuantity" id="itemQuantity" placeholder="Item Quantity"  onblur="removeRedFromQuantityForm()">
         </div>
         <button type="button" class="btn btn-success" id="addBtn" onclick="handleAddClicked()">Add</button>
         <button type="button" class="btn btn-default" onclick="handleCancelClick()">Cancel</button>
@@ -49,8 +49,8 @@
             <thead>
             <tr>
                 <th>Item</th>
-                <th>Category</th>
-                <th>Stock</th>
+                <th>Quantity</th>
+                <th>Price</th>
                 <th>Operations</th>
             </tr>
             </thead>
@@ -82,19 +82,19 @@
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-user"></span>
                   </span>
-                  <input type="text" class="form-control" name="itemName" id="itemName_edit" placeholder="item Name" onblur="removeRedFromItemForm()">
+                  <input type="text" class="form-control" name="itemName" id="itemName_edit" placeholder="Item Name" onblur="removeRedFromItemForm()">
               </div>
               <div class="form-group input-group price">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-list-alt"></span>
                   </span>
-                  <input type="text" class="form-control" name="price" id="price_edit" placeholder="item price" onblur="removeRedFromPriceForm()">
+                  <input type="text" class="form-control" name="price" id="price_edit" placeholder="Item Price" onblur="removeRedFromPriceForm()">
               </div>
               <div class="form-group input-group quantity">
                   <span class="input-group-addon">
                       <span class="glyphicon glyphicon-education"></span>
                   </span>
-                  <input type="text" class="form-control" name="itemquantity" id="itemquantity_edit" placeholder="item quantity"  onblur="removeRedFromQuantityForm()">
+                  <input type="text" class="form-control" name="itemQuantity" id="itemQuantity_edit" placeholder="Item Quantity"  onblur="removeRedFromQuantityForm()">
               </div>
               <button id="editButton" class="btn btn-warning">Edit</button>
               <button id="editCancelButton" class="btn btn-secondary">Cancel</button>
