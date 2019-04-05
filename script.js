@@ -12,11 +12,6 @@ $(document).ready(initializeApp);
 /***********************
  * item_array - global array to hold item objects
  * @type {Array}
- * example of item_array after input: 
- * item_array = [
- *  { name: 'Jake', class: 'Math', quantity: 85 },
- *  { name: 'Jill', class: 'Comp Sci', quantity: 85 }
- * ];
  */
 var item_array = [];
 var isChecked;
@@ -44,7 +39,6 @@ function initializeApp(){
 *     
 */
 function addClickHandlersToElements(){
-  console.log('click handlers run');
   $('#itemName').focusin(function(){
     $('#itemName').removeClass('error');
     $('.glyphicon-user').removeClass('glyphError');
@@ -63,11 +57,6 @@ function addClickHandlersToElements(){
     $("#addBtn").click();//runs the function attaches to click event off add button
     }
   });
-  // document.addEventListener("keyup", function(event) {
-  // if (event.keyCode === 13) {
-  //   $("#addBtn").click();
-  // }
-  // });
 };
 
 /***************************************************************************************************
@@ -103,7 +92,6 @@ function addItem(){
     return;
   };
   item_array.push(item);
-  console.log("item Array: ", item_array);
   clearAddItemFormInputs();
   updateItemList(item_array[item_array.length-1]);
   sendDataToAPI(item);
@@ -112,7 +100,6 @@ function addItem(){
  * clearAddItemForm - clears out the form values based on inputIds variable
  */
 function clearAddItemFormInputs(){
-  console.log('item forms cleared');
   $('#itemName').val("");
   $('#price').val("");
   $('#itemQuantity').val("");
@@ -123,7 +110,6 @@ function clearAddItemFormInputs(){
  * @param {object} itemObj a single item object with price, name, and quantity inside
  */
 
- //<button type="button" price="btn btn-danger">Danger</button>
 function renderItemOnDom(itemObj,index){
   var name = $('<td>',{
     text: itemObj.name,
@@ -154,8 +140,9 @@ function renderItemOnDom(itemObj,index){
   var deleteTD = $('<td>');
   buttonsDiv.append(editButton,deleteButton).appendTo(deleteTD);
   if(index%2==0){
+    debugger;
     var tableRowIndex = $('<tr>',{
-      class: "gray",
+      class: "meow",
     });
   } else{
     var tableRowIndex = $('<tr>');
@@ -184,7 +171,6 @@ function calculateQuantityAverage(){
     sumofQuantitys+=parseInt(item_array[a].quantity);
   };
   var average = Math.round(sumofQuantitys/item_array.length);
-  console.log("Current average: "+ average);
   return average;
 };
 /***************************************************************************************************
@@ -225,7 +211,6 @@ function displayItems(response){
     item_array.push(inventory[s]);
     renderItemOnDom(inventory[s],s);
   };
-  console.log("item_array after pulling API data: ", item_array);
 };
 
 function sendDataToAPI(item){
@@ -246,7 +231,6 @@ function sendDataToAPI(item){
 
 function addDataToAPI(response){
   var lastitem = item_array[item_array.length-1];
-  console.log('success!');
   lastitem.id = response.new_id;
 };
 
@@ -256,8 +240,8 @@ function showError(){
 
 function deleteFromAPI(ID){
   var itemsAPI = {
-    url: 'http://s-apis.learningfuze.com/IT/delete',
-    success: showSuccess,
+    url: 'http://localhost:5700/api/delete.php',
+    // success: showSuccess,
     method: 'post',
     data: {
       item_id: ID
@@ -268,13 +252,13 @@ function deleteFromAPI(ID){
   $.ajax(itemsAPI);
 };
 
-function showSuccess(){
-  console.log("item deleted!");
-};
+// function showSuccess(){
+//   console.log("item deleted!");
+// };
 
 function showDeleteModal(item,row){
   var modal = document.getElementById('deleteModal')
-  var span = document.getElementsBypriceName("close")[0];
+  var span = document.getElementsByClassName("close")[0];
   var deleteBtn = document.getElementById('delButton');
   var cancelBtn = document.getElementById('cancelButton');
   modal.style.display = "block";//display modal
@@ -307,7 +291,7 @@ function isBoxChecked() {
 
 function areInputsValid(name,price,quantity){
   var invalidCounter = 0;
-  if (name<2 ){ 
+  if (name<2 || !isNaN(name) ){ 
     invalidCounter++;
     $('#itemName').val("");
     $('#itemName').attr("placeholder", "Enter at least 2 letters").addClass('red error');
@@ -316,7 +300,7 @@ function areInputsValid(name,price,quantity){
   if(isNaN(price) || price.length<1){ 
     invalidCounter++
     $('#price').val("");
-    $('#price').attr("placeholder", "Enter at least 2 letters").addClass('red error');
+    $('#price').attr("placeholder", "Enter a valid number").addClass('red error');
     $('.glyphicon-list-alt').addClass('glyphError');
   };
   if(isNaN(quantity) || quantity.length<1){//if item quantity input is not a number
